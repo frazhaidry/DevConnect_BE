@@ -1,0 +1,20 @@
+{
+  "name": "devtin",
+  "version": "1.0.0",
+  "description": "Tinder for developer",
+  "main": "index.js",
+  "scripts": {
+    "start" : "node src/app.js",
+    "dev" : "nodemon src/app.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
+  "author": "Fraz Ahmad Haidry",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
