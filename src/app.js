@@ -24,8 +24,6 @@ app.get("/hello", (req, res) => {
     
 });
 
-
-
 app.listen(3000, ()=> {
     console.log("Serving is running on 3000")
 });
