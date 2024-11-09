@@ -1,29 +1,30 @@
 const express = require("express");
-const { adminAuth, userAuth } = require("./middlewares/auth")
+// const { adminAuth, userAuth } = require("./middlewares/auth")
 const app = express();
 
-app.use("/admin", adminAuth);
-// app.use("/user", userAuth);
+// When you handle err on the first line
+// app.use("/", (err, req, res,next) => {
+//     if(err){
+//         res.status(500).send("Something went wrong");
+//     }
+// })
 
-//Authorized route
-app.get("/admin/getdata", (req,res) => {
-    res.send("All data sent");
-    
-})
- 
-//Authorized route
-app.get("/admin/deletedata", (req, res)=> {
-    res.send("Deleted a user");
+
+app.get("/getUserData",(req, res) => {
+    try {
+        throw new Error("hfgedege");
+        res.send("User Data Sent");
+    } catch (error) {
+        res.status(500).send("Some error occured")
+    }
+   
 })
 
-//This route will not need to be authenticated 
-app.post("/user/login", (req, res) => {
-    res.send("User logged in successfully");
-})
-
-//This route will check user is authorized or not
-app.get("/user/data", userAuth, (req, res) => {
-    res.send("All Data Sent");
+// Handling all error
+app.use("/", (err, req, res,next) => {
+    if(err){
+        res.status(500).send("Something went wrong");
+    }
 })
 
 app.listen(3000, ()=> {
