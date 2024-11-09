@@ -2,28 +2,37 @@ const express = require("express");
 
 const app = express();
 
+//we can
+//app.use("/route", [rH, rh2, rh3, rh4, rh5]);
 
-app.post("/hello", (req, res) => {
-    res.send("Post call");
-});
+app.use(
+    "/user", [
+(req, res, next) => {
+    //Route Handler
+    console.log("Handling the route user 1")
+    // res.send("Route Handler 1");
+    next();
+},
 
-app.delete("/hello", (req, res) => {
-    res.send("Deleted successfully");
-});
+(req,res,next) => {
+    console.log("Handling the route user 2")
+    // res.send("Route handler 2");
+    next();
+}
+],
 
-//Dynamic Routing (hello/123/fraz)
-app.get("/hello/:id/:name", (req, res) => {
-    console.log(req.params)
-    res.send({ firstName : "fraz", lastName: "Haidry"})
-});
+(req,res,next) => {
+    console.log("Handling the route user 3")
+    // res.send("Route handler 2");
+    next();
+},
 
-
-//To get the query send hello?userid=101&pass=123 in the postman get method
-app.get("/hello", (req, res) => {
-    console.log(req.query)
-    
-});
-
+(req,res,next) => {
+    console.log("Handling the route user 4")
+    res.send("Route handler 4");
+    // next()
+}
+);
 app.listen(3000, ()=> {
     console.log("Serving is running on 3000")
 });
