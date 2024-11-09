@@ -1,32 +1,41 @@
 const express = require("express");
-// const { adminAuth, userAuth } = require("./middlewares/auth")
+const connectDB = require("./config/database")
 const app = express();
-
-// When you handle err on the first line
-// app.use("/", (err, req, res,next) => {
-//     if(err){
-//         res.status(500).send("Something went wrong");
-//     }
-// })
+const User = require("./models/user")
 
 
-app.get("/getUserData",(req, res) => {
+app.post("/signup", async (req, res) => {
     try {
-        throw new Error("hfgedege");
-        res.send("User Data Sent");
+        const userObj = {
+            firstName: "adeem",
+            lastName: "adeem",
+            emailId: "adeem@gmail.com",
+            password: "1235"
+        };
+
+        const user = new User(userObj);
+        await user.save();
+        res.send("User added successfully");
     } catch (error) {
-        res.status(500).send("Some error occured")
+        console.error("Error adding user:", error);
+        res.status(500).send("An error occurred while adding the user.");
     }
-   
-})
-
-// Handling all error
-app.use("/", (err, req, res,next) => {
-    if(err){
-        res.status(500).send("Something went wrong");
-    }
-})
-
-app.listen(3000, ()=> {
-    console.log("Serving is running on 3000")
 });
+
+
+async function startServer() {
+    try {
+        await connectDB();
+        console.log("Database connection established...");
+        
+        app.listen(3000, () => {
+            console.log("Server is running on port 3000");
+        });
+    } catch (err) {
+        console.log(err);
+        console.error("Database cannot be connected");
+    }
+} 
+
+startServer();
+
