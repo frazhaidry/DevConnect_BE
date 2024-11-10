@@ -4,23 +4,59 @@ const mongoose = require("mongoose");
 //creating a schema
 const userSchema = new mongoose.Schema({
     firstName: {
-        type: String
+        type: String,
+        required: true,
+        minLength: 4,
+        maxLength: 40,
     },
-    lastName: {
-        type:String
+
+    lastName: { 
+        type: String,
     },
-    emailId: {
-        type:String
+
+    emailId: { 
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
     },
+
     password: {
-        type:String
+        type: String,
+        required: true,
     },
+
     age: {
-        type: Number
+        type: Number,
+        min: 18,
+        max: 50,
     },
+
     gender: {
-        type: String
+        type: String,
+        validate(value){ // Custom validate function
+           if(!["male", "female", "others"].includes(value)){
+             throw new Error("Gender data is not valid")
+           }
+        }
+    },
+
+    photoUrl: {
+        type: String,
+        default: "https://www.inklar.com/wp-content/uploads/2020/05/dummy_user-370x300-1.png"
+    },
+
+    about: {
+        type: String,
+        default: "This is a default about of the user!"
+    },
+
+    skills: {
+        type: [String]
     }
+}, {
+    timestamps: true,
 });
 
 
