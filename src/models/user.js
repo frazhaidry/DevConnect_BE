@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator")
 
 
 //creating a schema
@@ -9,7 +10,7 @@ const userSchema = new mongoose.Schema({
         minLength: 4,
         maxLength: 40,
     },
-
+ 
     lastName: { 
         type: String,
     },
@@ -17,15 +18,25 @@ const userSchema = new mongoose.Schema({
     emailId: { 
         type: String,
         required: true,
-        unique: true,
+        unique: true, 
         lowercase: true,
         trim: true,
+        validate(value){
+            if(!validator.isEmail(value)){ 
+                throw new Error("Invalid  email Address: " + value);
+            }
+        } 
     },
 
     password: {
         type: String,
         required: true,
-    },
+        validate(value){
+            if(!validator.isStrongPassword(value)){ 
+                throw new Error("Enter a Strong Password: " + value);
+            }
+        } 
+    },  
 
     age: {
         type: Number,
@@ -44,7 +55,12 @@ const userSchema = new mongoose.Schema({
 
     photoUrl: {
         type: String,
-        default: "https://www.inklar.com/wp-content/uploads/2020/05/dummy_user-370x300-1.png"
+        default: "https://www.inklar.com/wp-content/uploads/2020/05/dummy_user-370x300-1.png",
+        validate(value){
+            if(!validator.isURL(value)){ 
+                throw new Error("Invalid  Photo URL " + value);
+            }
+        } 
     },
 
     about: {
