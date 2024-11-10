@@ -5,11 +5,12 @@ const User = require("./models/user")
 
 app.use(express.json());
 
+//API - To add user into a database
 app.post("/signup", async (req, res) => {
 
     console.log(req.body);
     const user = new User(req.body);
-    
+
     try { 
         await user.save();
         res.send("User added successfully");
@@ -18,6 +19,67 @@ app.post("/signup", async (req, res) => {
         res.status(500).send("An error occurred while adding the user.");
     }
 });
+
+//API - Get user by email;
+app.get("/user",async (req, res) => {
+    const userEmail = req.body.emailId; 
+    try{
+       const users = await User.findOne({emailId: userEmail}); 
+       if(!users){
+         res.status(404).send("User not found");
+        
+       }else{
+         res.send(users)
+       }
+    }catch(err){ 
+        res.status(400).send("Someting went wrong");
+    }
+})
+
+// Feed API - GET/feed - get all the users from the database
+app.get("/feed", async(req, res) => { 
+    try {
+        const users = await User.find({})
+        res.send(users);
+
+        
+    } catch (error) {
+        res.status(400).send("Someting went wrong");
+    }
+})
+
+// API - Delete the existing user from the database
+app.delete("/user", async(req, res) => {
+    const userId = req.body.userId;
+
+    try{
+        const user = await User.findByIdAndDelete({ _id: userId})
+
+        res.send("User deleted successfully")
+
+    }catch(err){
+        res.status(400).send("Something went wrong");
+    }
+}
+)
+
+// API - To update the existing user
+app.patch("/user", async(req, res) => {
+    const userId = req.body.userId;
+    const data = req.body;
+
+    try {
+        const user = await User.findByIdAndUpdate({_id: userId}, data , {
+            returnDocument: "before",
+            returnDocument: "after",
+        });  
+        console.log(user)
+        res.send("User updated successfullly"); 
+    } catch (error) {
+        res.status(400).send("Something went wrong");
+    }
+})
+
 
 
 async function startServer() {
