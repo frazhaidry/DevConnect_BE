@@ -3,9 +3,12 @@ const connectDB = require("./config/database")
 const app = express();
 const User = require("./models/user")
 const { validateSignUpData } = require("./utils/validaton")
-const  bcrypt = require("bcrypt")
+const  bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken")
 
 app.use(express.json());
+app.use(cookieParser())
 
 //API - To add user into a database
 app.post("/signup", async (req, res) => {
@@ -36,7 +39,7 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-//API - login api
+//API - login api 
 app.post("/login", async(req, res) => {
     try{
         const {emailId, password} = req.body;
@@ -50,6 +53,13 @@ app.post("/login", async(req, res) => {
         const isPasswordValid = await bcrypt.compare(password, user.password)
 
         if(isPasswordValid){
+            // Create a JWT Token
+            const token = await jwt.sign({_id: user._id}, "DEV@Tinder$711");
+            // console.log(token);
+
+
+            // Add the token to cookie  and send the response back to the user
+            res.cookie("token", token);
             res.send("Login Successful!");
         }
 
@@ -61,6 +71,43 @@ app.post("/login", async(req, res) => {
     }catch(err){
         res.status(400).send("ERROR : " + err.message);
     }
+}) 
+
+//API - Profile API
+app.get("/profile", async(req, res) => {
+  try { 
+    const cookies =  req.cookies;
+
+   const { token } = cookies;
+
+   if(!token){
+     throw new Error("Invalid Token")
+   }
+
+   // Validate my token 
+
+   const decodedMessage = await jwt.verify(token, "DEV@Tinder$711")
+   
+//    console.log(decodedMessage); 
+
+   const {_id} = decodedMessage; // id is destructred from decodedMessage
+
+//    console.log("Logged In user is: " + _id);
+
+   const user = await User.findById(_id);
+
+   if(!user){
+    throw new Error("User does not exist");
+   }
+
+   res.send(user);
+
+//    console.log(cookies);
+//    res.send("Reading Cookie");
+    
+  }catch (error) {
+    res.status(400).send("Error : " + error.message);
+} 
 })
 
 //API - Get user by email;
@@ -75,7 +122,7 @@ app.get("/user",async (req, res) => {
          res.send(users)
        }
     }catch(err){ 
-        res.status(400).send("Someting went wrong");
+        res.status(400).send("Error : " + err.message);
     }
 })
 
