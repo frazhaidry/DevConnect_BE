@@ -16,6 +16,28 @@ const validateSignUpData  = (req) => {
    }
 }
 
+// Validation function for editing profile or password
+const validateEditProfileOrPasswordData = (req) => {
+    const allowedEditFields = [
+        "firstName",
+        "lastName",
+        "emailId",
+        "photoUrl",
+        "gender",
+        "about",
+        "skills",
+        "password" // Include 'password' field for password updates
+    ];
+
+    // Ensure all fields in the request body are allowed
+    const isEditAllowed = Object.keys(req.body).every((field) =>
+        allowedEditFields.includes(field)
+    );
+
+    return isEditAllowed;
+};
+
 module.exports  = {
     validateSignUpData,
+    validateEditProfileOrPasswordData,
 }
