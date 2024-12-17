@@ -30,7 +30,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
         }
 
         const loggedInUser = req.user;
-        console.log(loggedInUser); // Before updation
+        // console.log(loggedInUser); // Before updation
 
         // Check if password is being updated
         if (req.body.password) {
@@ -49,7 +49,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
         });
 
         await loggedInUser.save();
-        console.log(loggedInUser); // After updation
+        // console.log(loggedInUser); // After updation
 
         res.json({
             message: `${loggedInUser.firstName}, your profile updated successfully`,
