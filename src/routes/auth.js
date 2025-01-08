@@ -43,7 +43,7 @@ authRouter.post("/login", async(req, res) => {
         const {emailId, password} = req.body;
 
         const user = await User.findOne({emailId: emailId})
-        // console.log(user);
+        // console.log(user); 
         if(!user){
             throw new Error("Invalid Credentials")
         }
@@ -60,7 +60,9 @@ authRouter.post("/login", async(req, res) => {
             res.cookie("token", token , {
                 expires: new Date(Date.now() + 8 * 3600000)
             });  // Sending token which we get in profile url
-            res.send("Login Successful!");
+            
+            res.send(user);
+            
         }
  
         else{
