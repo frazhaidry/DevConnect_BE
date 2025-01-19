@@ -44,8 +44,14 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async(req, res) 
 
     const data = await connectionRequest.save();
 
+    const message =
+      status === "interested"
+        ? `${req.user.firstName} is interested in connecting with ${toUser.firstName}`
+        : `${req.user.firstName} has ignored ${toUser.firstName}'s connection request`;
+
     res.json({
-        message: req.user.firstName + "is " +status+ " in " +toUser.firstName,
+        success: true,
+        message,
         data,
     })
 

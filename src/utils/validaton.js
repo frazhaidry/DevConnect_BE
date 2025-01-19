@@ -24,6 +24,7 @@ const validateEditProfileOrPasswordData = (req) => {
         "emailId",
         "photoUrl",
         "gender",
+        "age",
         "about",
         "skills",
         "password" // Include 'password' field for password updates
