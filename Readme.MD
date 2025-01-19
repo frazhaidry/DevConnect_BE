@@ -1,7 +1,3 @@
-Here’s your revised description with bullet points for better readability:
-
----
-
 # **Project Overview: Social Connection Platform**
 
 This project is a minimalistic social connection platform designed to enable users to discover and build meaningful connections. The platform prioritizes:  
@@ -61,5 +57,3 @@ Built with **Node.js**, **Express**, and **MongoDB**, it ensures secure and scal
   - Logical constraints ensure no duplicate or self-referencing requests.  
 
 ---
-
-Let me know if any other refinements are needed!
