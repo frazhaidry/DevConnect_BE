@@ -24,39 +24,6 @@ app.use("/", profileRouter);
 app.use("/", requestRouter)
 app.use("/", userRouter)
 
-
-
-
-
-
-//API - Get user by email;
-// app.get("/user",async (req, res) => {
-//     const userEmail = req.body.emailId; 
-//     try{
-//        const users = await User.findOne({emailId: userEmail}); 
-//        if(!users){
-//          res.status(404).send("User not found");
-        
-//        }else{
-//          res.send(users)
-//        }
-//     }catch(err){ 
-//         res.status(400).send("Error : " + err.message);
-//     }
-// })
-
-// Feed API - GET/feed - get all the users from the database
-// app.get("/feed", async(req, res) => { 
-//     try {
-//         const users = await User.find({})
-//         res.send(users);
-
-        
-//     } catch (error) {
-//         res.status(400).send("Someting went wrong");
-//     }
-// })
-
 // API - Delete the existing user from the database
 app.delete("/user", async(req, res) => {
     const userId = req.body.userId;
