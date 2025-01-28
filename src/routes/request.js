@@ -5,6 +5,8 @@ const User = require("../models/user")
 
 const requestRouter = express.Router();
 
+const sendEmail = require("../utils/sendEmail")
+
 //API - To send connection req
 requestRouter.post("/request/send/:status/:toUserId", userAuth, async(req, res) => {
    try{
@@ -43,6 +45,13 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async(req, res) 
     });
 
     const data = await connectionRequest.save();
+
+    const emailRes = await sendEmail.run(
+        "A new friend request from " + req.user.firstName,
+        req.user.firstName + " is " + status + " in " + toUserId.firstName,
+    )
+    
+    console.log(emailRes);
 
     const message =
       status === "interested"
