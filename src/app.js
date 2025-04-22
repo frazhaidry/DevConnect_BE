@@ -3,7 +3,9 @@ const connectDB = require("./config/database")
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors")
+const http = require("http")
 require('dotenv').config();
+
 
 require("./utils/cron")
 
@@ -19,6 +21,8 @@ const authRouter = require("./routes/auth")
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
+const initializeSocket = require("./utils/socket");
+const { chatRouter } = require("./routes/chat");
 
 
 
@@ -26,6 +30,12 @@ app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
+app.use("/", chatRouter);
+
+const server = http.createServer(app);
+initializeSocket(server)
+
+
 
 // API - Delete the existing user from the database
 app.delete("/user", async(req, res) => {
@@ -87,7 +97,7 @@ async function startServer() {
         await connectDB();
         console.log("Database connection established...");
         
-        app.listen(process.env.PORT, () => {
+        server.listen(process.env.PORT, () => {
             console.log(`Server running on port 3000`);
         });
     } catch (err) {
