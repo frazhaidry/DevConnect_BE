@@ -8,7 +8,7 @@ const BlogModel = require('../models/Blog');
 // GET all blogs 
 BlogRouter.get("/blogs", async(req, res) => {
     try{
-        const blogs = await Blog.find({});
+        const blogs = await Blog.find({}).populate("author", "firstName lastName photoUrl");;
         res.json({
             message: "Blogs fetched successfully",
             data: blogs,
@@ -47,8 +47,7 @@ BlogRouter.put("/blogs/:id", userAuth, async(req , res) => {
             return res.status(404).send("Blog not found")
         }
         if(blog.author.toString() !== req.user._id.toString()){
-            return res.status(401
-            ).send("You are not allowed to edit this blog")
+            return res.status(401).send("You are not allowed to edit this blog")
         }
 
         blog.title = title || blog.title;
